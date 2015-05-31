@@ -61,8 +61,11 @@ class OverflowEditorView
       @views.push(view)
 
   getPreferredLineLength: ->
-    atom.config.get('editor.preferredLineLength',
-      scope: @editor.getRootScopeDescriptor())
+    if atom.config.get('overflow.usePreferredLineLength')
+      atom.config.get('editor.preferredLineLength',
+        scope: @editor.getRootScopeDescriptor())
+    else
+      atom.config.get('overflow.column')
 
   updateOverflows: ->
     # Task::start can throw errors atom/atom#3326
@@ -73,3 +76,4 @@ class OverflowEditorView
         @addViews(overflows) if @buffer?
     catch error
       console.warn('Error starting overflow task', error.stack ? error)
+
